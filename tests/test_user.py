@@ -11,20 +11,13 @@ class TestUserCreate:
         '''Позитивный сценарий создания пользователя: передаем все обязательные поля (email, password, name).'''
     )
     @allure.description('ОР: Пользователь успешно создан.')
-    def test_create_user_email_password_name_created_successfully(self, user_data):
-        user_methods = UserMethods()
-
-        status_code, response_data, payload = user_methods.post_create_user(user_data)
+    def test_create_user_email_password_name_created_successfully(self, create_user):
+        status_code, response_data, _ = create_user
 
         assert status_code == 200
         assert response_data["success"] is True
         assert "user" in response_data
         assert "accessToken" in response_data
-
-        user_methods.delete_user(
-             accessToken=response_data["accessToken"],
-             json={"email": payload["email"], "password": payload["password"]}
-    )
 
 
     @allure.title('Негативный сценарий создания пользователя: email уже есть в системе.')
